@@ -7,10 +7,13 @@ public class Simulator : MonoBehaviour {
     public int generations = 100;
     public float simulationTime = 15f;
 
+    public float TimeScale = 10f;
+
     public IEnumerator Simulation()
     {
         for (int i = 0; i < generations; i++)
         {
+            //StartCoroutine(CreateCreatures())
             CreateCreatures();
             StartSimulation();
 
@@ -27,6 +30,7 @@ public class Simulator : MonoBehaviour {
 
     public int variations = 100;
     private Genome bestGenome;
+    public GameObject bestCreature = null;
 
     public Vector3 distance = new Vector3(2, 0, 0);
     public GameObject prefab;
@@ -35,10 +39,11 @@ public class Simulator : MonoBehaviour {
     private void Start()
     {
         bestGenome = Instantiate(prefab, new Vector3(0, 2, 0), Quaternion.identity).GetComponent<Genome>();
+        // Randomise starting best genome
+        bestGenome.Mutate();
         Destroy(bestGenome.gameObject);
         //bestGenome = new Creature().gameObject.GetComponent<Genome>();
         StartCoroutine(Simulation());
-        Time.timeScale = 10;
     }
 
     public void CreateCreatures()
@@ -50,11 +55,19 @@ public class Simulator : MonoBehaviour {
 
             // Instantiate the creature
             Vector3 position = new Vector3(0, 2, 0) + distance * i;
+            //if(i%3 == 0)
+                //yield return new WaitForEndOfFrame();
             Creature creature = Instantiate(prefab, position, Quaternion.identity).GetComponent<Creature>();
 
             creature.genome = genome;
             creatures.Add(creature);
         }
+    }
+
+    private void Update()
+    {
+        if (Time.timeScale != TimeScale)
+            Time.timeScale = TimeScale;
     }
 
     public void StartSimulation()
@@ -93,5 +106,9 @@ public class Simulator : MonoBehaviour {
             }
         }
         Debug.Log("Best genome in generation had a score of " + bestScore);
+        if (bestCreature != null)
+            Destroy(bestCreature);
+        bestCreature = Instantiate(prefab, new Vector3(-10, 2, 0), Quaternion.identity);
+        bestCreature.GetComponent<Creature>().genome = bestGenome;
     }
 }

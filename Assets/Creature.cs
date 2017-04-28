@@ -4,8 +4,9 @@ using UnityEngine;
 
 public class Creature : MonoBehaviour
 {
-    public LegController left;
-    public LegController right;
+    //public LegController leg1;
+    //public LegController leg2;
+    public List<LegController> legs = new List<LegController>();
 
     public GameObject head;
 
@@ -17,9 +18,13 @@ public class Creature : MonoBehaviour
     {
         //left.position = Mathf.Sin(Time.time);
         //right.position = Mathf.Sin(-Time.time);
-        
-        left.position = genome.left.EvaluateAt(Time.time);
-        right.position = genome.right.EvaluateAt(Time.time);
+
+        //leg1.position = genome.leg1.EvaluateAt(Time.time);
+        //leg2.position = genome.leg2.EvaluateAt(Time.time);
+        for (int i = 0; i < genome.legs.Length; i++)
+        {
+            legs[i].position = genome.legs[i].EvaluateAt(Time.time);
+        }
     }
 
 
