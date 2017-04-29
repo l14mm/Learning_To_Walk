@@ -94,7 +94,7 @@ public class Simulator : MonoBehaviour {
 
     public void EvaluateScore()
     {
-        /*
+        ///*
         float totalScore = 0;
         foreach (Creature creature in creatures)
         {
@@ -118,9 +118,9 @@ public class Simulator : MonoBehaviour {
                 break;
             }
         }
-        */
+        //*/
 
-        ///*
+        /*
         foreach (Creature creature in creatures)
         {
             float score = creature.GetScore();
@@ -141,6 +141,6 @@ public class Simulator : MonoBehaviour {
             Destroy(bestCreature);
         bestCreature = Instantiate(prefab, new Vector3(-10, 2, 0), Quaternion.identity);
         bestCreature.GetComponent<Creature>().genome = bestGenome;
-        //*/
+        */
     }
 }
