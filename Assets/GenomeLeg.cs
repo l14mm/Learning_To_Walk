@@ -26,7 +26,7 @@ public class GenomeLeg : MonoBehaviour {
 
     public void Mutate()
     {
-        float mutationScale = 5;
+        float mutationScale = 2;
         switch (Random.Range(0, 3 + 1))
         {
             case 0:
