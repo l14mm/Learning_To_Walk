@@ -15,6 +15,7 @@ public class Simulator : MonoBehaviour {
         {
             //StartCoroutine(CreateCreatures())
             CreateCreatures();
+            yield return new WaitForSeconds(2);
             StartSimulation();
 
             yield return new WaitForSeconds(simulationTime);
@@ -32,13 +33,14 @@ public class Simulator : MonoBehaviour {
     private Genome bestGenome;
     public GameObject bestCreature = null;
 
+    public Vector3 start = new Vector3(0, 2, 0);
     public Vector3 distance = new Vector3(2, 0, 0);
     public GameObject prefab;
     private List<Creature> creatures = new List<Creature>();
 
     private void Start()
     {
-        bestGenome = Instantiate(prefab, new Vector3(0, 2, 0), Quaternion.identity).GetComponent<Genome>();
+        bestGenome = Instantiate(prefab, start + new Vector3(-2, 2, 0), Quaternion.identity).GetComponent<Genome>();
         // Randomise starting best genome
         bestGenome.Mutate();
         Destroy(bestGenome.gameObject);
@@ -54,10 +56,9 @@ public class Simulator : MonoBehaviour {
             Genome genome = bestGenome.Clone().Mutate();
 
             // Instantiate the creature
-            Vector3 position = new Vector3(0, 2, 0) + distance * i;
-            //if(i%3 == 0)
-                //yield return new WaitForEndOfFrame();
+            Vector3 position = start + distance * i;
             Creature creature = Instantiate(prefab, position, Quaternion.identity).GetComponent<Creature>();
+            creature.head.GetComponent<Rigidbody>().isKinematic = true;
 
             creature.genome = genome;
             creatures.Add(creature);
@@ -73,7 +74,10 @@ public class Simulator : MonoBehaviour {
     public void StartSimulation()
     {
         foreach (Creature creature in creatures)
+        {
             creature.enabled = true;
+            creature.head.GetComponent<Rigidbody>().isKinematic = false;
+        }
     }
 
     public void StopSimulation()
@@ -94,12 +98,13 @@ public class Simulator : MonoBehaviour {
 
     public void EvaluateScore()
     {
-        ///*
+        /*
         float totalScore = 0;
         foreach (Creature creature in creatures)
         {
             float score = creature.GetScore();
-            totalScore += score;
+            totalScore += score * score;
+            //Debug.Log(score);
         }
 
         float rand = Random.Range(0, totalScore);
@@ -108,8 +113,8 @@ public class Simulator : MonoBehaviour {
         foreach (Creature creature in creatures)
         {
             float score = creature.GetScore();
-            currentScore += score;
-            Debug.Log(score);
+            currentScore += score * score;
+            //Debug.Log(score);
             if (rand <= currentScore)
             {
                 bestGenome = creature.genome.Clone();
@@ -118,9 +123,9 @@ public class Simulator : MonoBehaviour {
                 break;
             }
         }
-        //*/
+        */
 
-        /*
+        ///*
         foreach (Creature creature in creatures)
         {
             float score = creature.GetScore();
@@ -139,8 +144,8 @@ public class Simulator : MonoBehaviour {
         Debug.Log("left p: " + bestGenome.legs[0].p);
         if (bestCreature != null)
             Destroy(bestCreature);
-        bestCreature = Instantiate(prefab, new Vector3(-10, 2, 0), Quaternion.identity);
-        bestCreature.GetComponent<Creature>().genome = bestGenome;
-        */
+        //bestCreature = Instantiate(prefab, new Vector3(-10, 2, 0), Quaternion.identity);
+        //bestCreature.GetComponent<Creature>().genome = bestGenome;
+        //*/
     }
 }
