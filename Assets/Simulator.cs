@@ -138,10 +138,6 @@ public class Simulator : MonoBehaviour {
             }
         }
         Debug.Log("Best genome in generation had a score of " + bestScore);
-        Debug.Log("left m: " + bestGenome.legs[0].m);
-        Debug.Log("left M: " + bestGenome.legs[0].M);
-        Debug.Log("left o: " + bestGenome.legs[0].o);
-        Debug.Log("left p: " + bestGenome.legs[0].p);
         if (bestCreature != null)
             Destroy(bestCreature);
         //bestCreature = Instantiate(prefab, new Vector3(-10, 2, 0), Quaternion.identity);

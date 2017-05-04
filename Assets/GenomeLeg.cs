@@ -27,23 +27,24 @@ public class GenomeLeg : MonoBehaviour {
     public void Mutate()
     {
         float mutationScale = 2;
+        float rangeScale = 4;
         switch (Random.Range(0, 3 + 1))
         {
             case 0:
                 m += Random.Range(-0.1f, 0.1f) * mutationScale;
-                m = Mathf.Clamp(m, -1f, +1f);
+                m = Mathf.Clamp(m, -1f * rangeScale, +1f * rangeScale);
                 break;
             case 1:
                 M += Random.Range(-0.1f, 0.1f) * mutationScale;
-                M = Mathf.Clamp(M, -1f, +1f);
+                M = Mathf.Clamp(M, -1f * rangeScale, +1f * rangeScale);
                 break;
             case 2:
                 p += Random.Range(-0.25f, 0.25f) * mutationScale;
-                p = Mathf.Clamp(p, 0.1f, 2f);
+                p = Mathf.Clamp(p, 0.1f * rangeScale, 2f * rangeScale);
                 break;
             case 3:
                 o += Random.Range(-0.25f, 0.25f) * mutationScale;
-                o = Mathf.Clamp(o, -2f, 2f);
+                o = Mathf.Clamp(o, -2f * rangeScale, 2f * rangeScale);
                 break;
         }
         //Debug.Log("values: " + "m: " + m);
