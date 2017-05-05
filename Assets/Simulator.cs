@@ -15,9 +15,11 @@ public class Simulator : MonoBehaviour {
         {
             //StartCoroutine(CreateCreatures())
             CreateCreatures();
-            yield return new WaitForSeconds(2);
+            //DestroyOldCreatures();
+            oldCreatures.Clear();
+            yield return new WaitForSeconds(1);
             StartSimulation();
-
+            
             yield return new WaitForSeconds(simulationTime);
 
             StopSimulation();
@@ -37,6 +39,7 @@ public class Simulator : MonoBehaviour {
     public Vector3 distance = new Vector3(2, 0, 0);
     public GameObject prefab;
     private List<Creature> creatures = new List<Creature>();
+    private List<Creature> oldCreatures = new List<Creature>();
 
     private void Start()
     {
@@ -48,12 +51,43 @@ public class Simulator : MonoBehaviour {
         StartCoroutine(Simulation());
     }
 
+    public Genome SelectGenome()
+    {
+        Genome g = bestGenome.Clone();
+        float totalScore = 0;
+        foreach (Creature creature in oldCreatures)
+        {
+            float score = creature.GetScore();
+            //Debug.Log("score: " + score);
+            totalScore += score * score;
+        }
+
+        float rand = Random.Range(0, totalScore);
+        float currentScore = 0;
+
+        foreach (Creature creature in oldCreatures)
+        {
+            float score = creature.GetScore();
+            currentScore += score * score;
+            if (rand <= currentScore)
+            {
+                g = creature.genome.Clone();
+                Debug.Log(score);
+                //Debug.Log("Genome selected had score of " + score);
+                //Debug.Log("Percentage " + (score * score / totalScore) * 100);
+                break;
+            }
+        }
+        return g;
+    }
+
     public void CreateCreatures()
     {
         for (int i = 0; i < variations; i++)
         {
             // Mutate the genome
-            Genome genome = bestGenome.Clone().Mutate();
+            //Genome genome = bestGenome.Clone().Mutate();
+            Genome genome = SelectGenome();
 
             // Instantiate the creature
             Vector3 position = start + distance * i;
@@ -62,6 +96,8 @@ public class Simulator : MonoBehaviour {
 
             creature.genome = genome;
             creatures.Add(creature);
+            Creature clone = creature;
+            oldCreatures.Add(clone);
         }
     }
 
@@ -94,6 +130,14 @@ public class Simulator : MonoBehaviour {
         creatures.Clear();
     }
 
+    public void DestroyOldCreatures()
+    {
+        foreach (Creature creature in oldCreatures)
+            Destroy(creature.gameObject);
+
+        oldCreatures.Clear();
+    }
+
     private float bestScore = 0;
 
     public void EvaluateScore()
@@ -119,7 +163,7 @@ public class Simulator : MonoBehaviour {
             {
                 bestGenome = creature.genome.Clone();
                 Debug.Log("Genome selected had score of " + score);
-                Debug.Log("Percentage " + (score / totalScore) * 100);
+                Debug.Log("Percentage " + (score * score / totalScore) * 100);
                 break;
             }
         }
