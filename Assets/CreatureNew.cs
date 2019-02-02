@@ -24,7 +24,7 @@ public class CreatureNew : MonoBehaviour
         public Gene Mutate()
         {
             Gene gene = new Gene();
-            
+
             gene.a = this.a;
             gene.b = this.b;
             gene.c = this.c;
@@ -32,23 +32,23 @@ public class CreatureNew : MonoBehaviour
 
             float mutationScale = 2;
             float rangeScale = 4;
-            switch (Random.Range(0, 3 + 1))
+            switch (Random.Range(0, 4))
             {
                 case 0:
                     gene.a += Random.Range(-0.1f, 0.1f) * mutationScale;
-                    gene.a = Mathf.Clamp(a, -1f * rangeScale, +1f * rangeScale);
+                    gene.a = Mathf.Clamp(gene.a, -1f * rangeScale, +1f * rangeScale);
                     break;
                 case 1:
                     gene.b += Random.Range(-0.1f, 0.1f) * mutationScale;
-                    gene.b = Mathf.Clamp(b, -1f * rangeScale, +1f * rangeScale);
+                    gene.b = Mathf.Clamp(gene.b, -1f * rangeScale, +1f * rangeScale);
                     break;
                 case 2:
                     gene.c += Random.Range(-0.25f, 0.25f) * mutationScale;
-                    gene.c = Mathf.Clamp(c, 0.1f * rangeScale, 2f * rangeScale);
+                    gene.c = Mathf.Clamp(gene.c, 0.1f * rangeScale, 2f * rangeScale);
                     break;
                 case 3:
                     gene.d += Random.Range(-0.25f, 0.25f) * mutationScale;
-                    gene.d = Mathf.Clamp(d, -2f * rangeScale, 2f * rangeScale);
+                    gene.d = Mathf.Clamp(gene.d, -2f * rangeScale, 2f * rangeScale);
                     break;
             }
 
